@@ -25,11 +25,9 @@
 
                     <div>
                         <label for="states">Estados</label>
-                        <select class="form-select js-example-basic-single" name="" name="states" id="states" aria-label="states">
+                        <select onchange="loadCities(this)" class="form-select js-example-basic-single" name="" name="states" id="states" aria-label="states">
                             <option selected>Seleccione un departamento o estado</option>
-                            @foreach($states as $state)
-                                <option value="{{ $state->id }}">{{ $state->name }}</option>
-                            @endforeach
+                           
                           </select>
                     </div>
 
@@ -46,6 +44,8 @@
     </div>
 </div>
 <script>
+
+    //Aqui se carga los estados de un pais seleccionado
     function loadstate(selectCountries){
         let countryId = selectCountries.value;
         fetch('/api/country/states/' + countryId).then(function(response) {
@@ -57,6 +57,7 @@
             })
     }
 
+    
     function buildStateSelect(data){
         let states = document.getElementById('states');
             data.forEach(function(state) {
@@ -67,6 +68,25 @@
             })
     }
 
-      
+    function loadCities(selectCities){
+        let stateId = selectCities.value;
+        fetch('/api/state/cities/' + stateId).then(function(response) {
+                return response.json();
+            }).then(function(data) {
+                let cities = document.getElementById('cities');
+                cities.innerHTML = '';
+                buildCitiesSelect(data);
+            })
+    }
+
+    function buildCitiesSelect(data){
+        let cities = document.getElementById('cities');
+            data.forEach(function(city) {
+                let option = document.createElement('option');
+                option.value = city.id;
+                option.innerHTML = city.name;
+                cities.append(option);
+            })
+    }
 </script>
 @endsection

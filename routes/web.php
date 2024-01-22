@@ -18,15 +18,18 @@ use App\Models\City;
 Route::get('/', function () {
 
     return view('welcome', [
-        'countries' => Country::all(),
-        'states' => State::all(),
-        'cities' => City::find(1),
+        'countries' => Country::all()
     ]);
 });
 
 Route::get('api/country/states/{country}', function (Country $country) {
     $State = State::where('country_id', $country->id)->get();
     return response()->json($State);
+});
+
+Route::get('api/state/cities/{state}', function (State $state) {
+    $City = City::where('state_id', $state->id)->get();
+    return response()->json($City);
 });
 
 Auth::routes();
